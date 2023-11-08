@@ -66,11 +66,11 @@ const save = async (req, res) => {
     const { body, user: { userId } } = req;
     const data = { ...body, createdBy: userId };
     console.log("save branch before");
-    const { errors } = Validator.isSchemaValid({ data, schema: saveBranchSchema });
-    console.log("save branch after");
-    if (errors) {
-      return res.badRequest('field-validation', errors);
-    }
+    // const { errors } = Validator.isSchemaValid({ data, schema: saveBranchSchema });
+    // console.log("save branch after");
+    // if (errors) {
+    //   return res.badRequest('field-validation', errors);
+    // }
     const { errors: error, doc } = await BranchesService.save(data);
 
     if (doc) {

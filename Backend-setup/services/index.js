@@ -1,6 +1,6 @@
-const branch = require('./branch');
+const Branches = require('./branch');
 
 module.exports = {
-    branch,
+    Branches,
     
 }
