@@ -1,0 +1,859 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "Identity service",
+    "description": "This end points ensure that the identity service sever and database connectivity are working",
+    "termsOfService": "https://inblox.network/terms/",
+    "contact": {
+      "email": "souravbansal88@gmail.com"
+    },
+    "license": {
+      "name": "dezen tech",
+      "url": ""
+    }
+  },
+  "servers": [
+    {
+      "url": "http://identity-service-dev.HOST_NAME",
+      "description": "Dev server"
+    },
+    {
+      "url": "https://identity-service-test.HOST_NAME",
+      "description": "Testing server"
+    },
+    {
+      "url": "https://identity-service.HOST_NAME",
+      "description": "Production server"
+    }
+  ],
+  "tags": [
+    {
+      "name": "default",
+      "description": "Endpoint for checking the service is availability",
+      "externalDocs": {
+        "description": "Find out more",
+        "url": "https://inblox.atlassian.net/wiki/spaces/MLDEV/pages/32276485/Identity+Service"
+      }
+    },
+    {
+      "name": "User",
+      "description": "Everything about the user"
+    }
+  ],
+  "paths": {
+    "/ping": {
+      "get": {
+        "tags": [
+          "default"
+        ],
+        "summary": "This endpoint will ensure that identity service is working",
+        "description": "This endpoint will ensure that identity service is working",
+        "operationId": "ping",
+        "responses": {
+          "200": {
+            "description": "Will return status 200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "ok"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/healthcheck": {
+      "get": {
+        "tags": [
+          "default"
+        ],
+        "summary": "This endpoint will be consumed by dashboards for monitoring purposes. It could talk to downstream services",
+        "description": "This endpoint will be consumed by dashboards for monitoring purposes. It could talk to downstream services",
+        "operationId": "healthcheck",
+        "responses": {
+          "200": {
+            "description": "Will return response for all downstream services",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "version": {
+                      "type": "string",
+                      "example": "1.0.0"
+                    },
+                    "dependsOn": {
+                      "type": "array",
+                      "items": {
+                        "properties": {
+                          "name": {
+                            "type": "string",
+                            "example": "node-microservice"
+                          },
+                          "type": {
+                            "type": "string",
+                            "example": "database"
+                          },
+                          "status": {
+                            "type": "string",
+                            "example": "success"
+                          },
+                          "version": {
+                            "type": "string",
+                            "example": "0"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/mobile-registration": {
+      "post": {
+        "tags": [
+          "User"
+        ],
+        "summary": "This endpoint is used for user registration through mobile.",
+        "description": "This endpoint is used for user registration through mobile.",
+        "operationId": "mobileRegistration",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/mobileRegistrationPostRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successfully registered the user",
+            "headers": {
+              "message": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "An otp has been sent successfully.",
+                "example": "An otp has been sent successfully."
+              }
+            }
+          },
+          "400": {
+            "description": "Validation error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error400"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error403"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error500"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/mobile-verification": {
+      "post": {
+        "tags": [
+          "User"
+        ],
+        "summary": "This endpoint is used for mobile verification.",
+        "description": "This endpoint is used for mobile verification.",
+        "operationId": "mobileVerfication",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/deviceId"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/mobileVerificationPostRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successfully verified the user",
+            "headers": {
+              "token": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "JWT token"
+              },
+              "message": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "User verfied successfully.",
+                "example": "User verfied successfully."
+              }
+            }
+          },
+          "400": {
+            "description": "Validation error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error400"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error403"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error500"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/resend-otp": {
+      "post": {
+        "tags": [
+          "User"
+        ],
+        "summary": "This endpoint is used for resend otp.",
+        "description": "This endpoint is used for resend otp.",
+        "operationId": "resendOtp",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/resendOtpPostRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successfully resend the OTP",
+            "headers": {
+              "message": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "An otp has been resent successfully.",
+                "example": "An otp has been resent successfully."
+              }
+            }
+          },
+          "400": {
+            "description": "Validation error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error400"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error403"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error500"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/change-password": {
+      "post": {
+        "tags": [
+          "User"
+        ],
+        "summary": "This endpoint is used for set the password.",
+        "description": "This endpoint is used for set the password.",
+        "operationId": "change-password",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/chnagePasswordPostRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successfully updated the password.",
+            "headers": {
+              "message": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "Successfully updated the password.",
+                "example": "Successfully updated the password."
+              }
+            }
+          },
+          "400": {
+            "description": "Validation error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error400"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error500"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/set-password": {
+      "post": {
+        "tags": [
+          "User"
+        ],
+        "summary": "This endpoint is used for set the password.",
+        "description": "This endpoint is used for set the password.",
+        "operationId": "set-password",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/setPasswordPostRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successfully set the password.",
+            "headers": {
+              "message": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "Successfully set the password.",
+                "example": "Successfully set the password."
+              }
+            }
+          },
+          "400": {
+            "description": "Validation error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error400"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error500"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/login": {
+      "post": {
+        "tags": [
+          "User"
+        ],
+        "summary": "This endpoint is used for login.",
+        "description": "This endpoint is used for login.",
+        "operationId": "login",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/loginPostRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successfully loggedin.",
+            "headers": {
+              "message": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "Successfully loggedin.",
+                "example": "Successfully loggedin."
+              },
+              "token": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "JWT token"
+              },
+              "set-password": {
+                "schema": {
+                  "type": "boolean"
+                },
+                "description": "If the password is not set"
+              }
+            }
+          },
+          "400": {
+            "description": "Validation error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error400"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error403"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error500"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/set-profile-pic": {
+      "post": {
+        "tags": [
+          "User"
+        ],
+        "summary": "This endpoint is used for set the profile pic.",
+        "description": "This endpoint is used for set the profile pic.",
+        "operationId": "set-profile-pic",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/setProfilePicPostRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successfully set the profile pic.",
+            "headers": {
+              "message": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "Successfully set the profile pic.",
+                "example": "Successfully set the profile pic."
+              }
+            }
+          },
+          "400": {
+            "description": "Validation error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error400"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error500"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    },
+    "parameters": {
+      "deviceId": {
+        "name": "x-platform-deviceid",
+        "in": "header",
+        "example": "6bed8d80-33e6-4a4d-88ef-9ec24b89a58b",
+        "description": "x-platform-deviceid is required for device verification",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "format":"uuid"
+        }
+      }
+    },
+    "schemas": {
+      "mobileRegistrationPostRequest": {
+        "type": "object",
+        "description": "Model containing mobile registration post data",
+        "properties": {
+          "mobileNumber": {
+            "type": "string",
+            "description": "mobile number for user registration",
+            "pattern": "^[0-9]{10}",
+            "example": "9898989898"
+          }
+        },
+        "required": [
+          "mobileNumber"
+        ]
+      },
+      "mobileVerificationPostRequest": {
+        "type": "object",
+        "description": "Model containing mobile verification post data",
+        "properties": {
+          "mobileNumber": {
+            "type": "string",
+            "description": "mobile number of registrated user",
+            "pattern": "^[0-9]{10}",
+            "example": "9898989898"
+          },
+          "otp": {
+            "type": "string",
+            "description": "otp for mobile number verification",
+            "pattern": "^[0-9]{6}",
+            "example": "123456"
+          },
+          "referralCode": {
+            "type": "string",
+            "description": "referralCode if having any.",
+            "example": "JOHN0007"
+          }
+        },
+        "required": [
+          "mobileNumber",
+          "otp"
+        ]
+      },
+      "resendOtpPostRequest": {
+        "type": "object",
+        "description": "Model containing resend otp post data",
+        "properties": {
+          "mobileNumber": {
+            "type": "string",
+            "description": "mobile number for user registration",
+            "pattern": "^[0-9]{10}",
+            "example": "9898989898"
+          }
+        },
+        "required": [
+          "mobileNumber"
+        ]
+      },
+      "setPasswordPostRequest": {
+        "type": "object",
+        "description": "Model containing set password post data",
+        "properties": {
+          "userName": {
+            "type": "string",
+            "description": "user name can be mobileNumber & email only.",
+            "example": "1234567890"
+          },
+          "password": {
+            "type": "string",
+            "description": "password.",
+            "example": "qwe123"
+          },
+          "newPassword": {
+            "type": "string",
+            "description": "newPassword.",
+            "example": "Pass#1234"
+          },
+          "confirmPassword": {
+            "type": "string",
+            "description": "confirmPassword.",
+            "example": "Pass#1234"
+          }
+        },
+        "required": [ "userName", "newPassword", "password", "confirmPassword" ]
+      },
+      "changePasswordPostRequest": {
+        "type": "object",
+        "description": "Model containing set password post data",
+        "properties": {
+          "password": {
+            "type": "string",
+            "description": "password",
+            "pattern": "^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[#$^+=!*()@%&]).{8,15}$",
+            "example": "Pass#1234"
+          },
+          "confirmPassword": {
+            "type": "string",
+            "description": "confirm password.",
+            "example": "Pass#1234"
+          }
+        },
+        "required": [  "password", "confirmPassword"  ]
+      },
+      "loginPostRequest": {
+        "type": "object",
+        "description": "Model containing login post data",
+        "properties": {
+          "userName": {
+            "type": "string",
+            "description": "user name can be mobileNumber & email only.",
+            "example": "1234567890"
+          },
+          "password": {
+            "type": "string",
+            "description": "password.",
+            "example": "Pass#1234"
+          }
+        },
+        "required": [ "userName" , "password" ]
+      },
+      "setProfilePicPostRequest": {
+        "type": "object",
+        "description": "Model containing set profile pic post data",
+        "properties": {
+          "profilePicFileId": {
+            "type": "string",
+            "format":"uuid",
+            "description": "password",
+            "example": "6bed8d80-33e6-4a4d-88ef-9ec24b89a58b"
+          }
+        },
+        "required": [ "profilePicFileId" ]
+      },
+      "error400": {
+        "type": "object",
+        "description": "Invalid request data",
+        "properties": {
+          "type": {
+            "type": "string",
+            "example": "field-validation"
+          },
+          "statusCode": {
+            "type": "integer",
+            "example": 400
+          },
+          "details": {
+            "type": "array",
+            "items": {
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "example": "version"
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Invalid request data"
+                }
+              }
+            }
+          }
+        }
+      },
+      "error403": {
+        "type": "object",
+        "description": "Forbidden",
+        "properties": {
+          "type": {
+            "type": "string",
+            "example": "unauthorized-access"
+          },
+          "statusCode": {
+            "type": "integer",
+            "example": 403
+          },
+          "details": {
+            "type": "array",
+            "items": {
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "example": "no-access"
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Do not have access to end point"
+                }
+              }
+            }
+          }
+        }
+      },
+      "error500": {
+        "type": "object",
+        "description": "Internal server error",
+        "properties": {
+          "statusCode": {
+            "type": "integer",
+            "example": 500
+          },
+          "type": {
+            "type": "string",
+            "example": "unexpected-internal-server-error"
+          },
+          "correlationId": {
+            "type": "string",
+            "example": "dab45211-f134-428f-93f5-901d8d5770c8"
+          },
+          "details": {
+            "type": "array",
+            "items": {
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "example": "unexpected-server-error"
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Please contact administrator and present correlation identifier for troubleshooting"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
