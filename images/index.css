@@ -1,0 +1,98 @@
+/* *{
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+body 
+{
+    background-color: beige;
+}
+#profile{
+    display: flex;
+    justify-content: center;
+    margin-top: 140px;
+}
+#im{
+    display: flex;
+    justify-content: center;
+}
+#profileImage{
+    display: flex;
+    justify-content: center;
+}
+#image{
+    height: 200px;
+    width: 200px;
+    border-radius: 100px;
+} */
+body{
+    background-color: beige;
+}
+.header {
+    width: 100%;
+    height: 200px;
+    display: flex;
+    justify-content: center;
+}
+#profile{
+    position: absolute;
+    margin-top: 40px;
+    margin-left: 120px;
+}
+#im{
+    position: absolute;
+    margin-top: 100px;
+    margin-left: 20px;
+    margin-left: 140px;
+}
+.container{
+    width: 100%;
+    height: 400px;
+    display: flex;
+    justify-content: space-around;
+}
+.firstDiv{
+    width: 45%;
+    height: 400px;
+    margin-left: 150px;
+    font-size: 25px;
+    line-height: 40px;
+}
+.secondDiv{
+    width: 26%;
+    height: 400px;
+}
+.thirdDiv{
+    width: 30%;
+    height: 400px;
+    margin-right :75px
+}
+.text{
+    font-size: 25px;
+    margin-top: 16px;
+    line-height: 50px;
+}
+#aboutMe{
+    margin-top: 20px;
+}
+#image{
+    height: 220px;
+    width: 220px;
+    border-radius: 110px;
+    margin-top: 60px;
+}
+.logo{
+    height: 40px;
+    width: 40px;
+    margin: 10px;
+}
+.head{
+    font-size: 25px;
+}
+.head1{
+    font-size: 25px;
+}
+.head2{
+    font-size: 25px;
+}
+#about{
+    font-size: 28px;
+}
