@@ -10,9 +10,8 @@ module.exports = {
       type: Sequelize.INTEGER,
     },
     public_id: { type: Sequelize.UUID, unique: true },
-    //user_id: { type: Sequelize.UUID, allowNull: true},
-    branch_name: { type: Sequelize.STRING, allowNull: false, unique: true },
-    branch_code: { type: Sequelize.STRING, allowNull: false, unique: true },
+    branch_name: { type: Sequelize.STRING, allowNull: false },
+    branch_code: { type: Sequelize.STRING, allowNull: false },
     branch_description: { type: Sequelize.STRING, allowNull: false },
     status: {
       type: Sequelize.STRING,

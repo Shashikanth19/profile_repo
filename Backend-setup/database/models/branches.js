@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
         
         public_id: { type: DataTypes.UUID, unique: true, allowNull: false },
         branch_name: { type: DataTypes.STRING, allowNull: false },
-        branch_code: { type: DataTypes.STRING, unique: true, allowNull: false },
+        branch_code: { type: DataTypes.STRING, allowNull: false },
         branch_description: { type: DataTypes.STRING, allowNull: false },
        
         status: {

@@ -4,20 +4,15 @@ const saveBranch = {
   type: 'object',
   properties: {
    
-    branchName: {
+    branch_name: {
       type: 'string',
       description: ' branchName',
     },
-    // userId: {
-    //   type: "string",
-    //   description: "unique reference of user",
-    //   format: 'uuid',
-    // },
-    branchCode: {
+    branch_code: {
       type: 'string',
       description: ' branchCode',
     },
-    branchDescription: {
+    branch_description: {
       type: 'string',
       description: 'description of branch',
     },
@@ -28,25 +23,25 @@ const saveBranch = {
       enum: [ 'inactive', 'active' ],
     },
    
-    createdBy: {
-      type: 'string',
-      description: 'unique reference of updatedBy',
-      format: 'uuid',
-    },
+    // createdBy: {
+    //   type: 'string',
+    //   description: 'unique reference of updatedBy',
+    //   format: 'uuid',
+    // },
     
   },
   errorMessage: {
     required: {
-      branchName: 'Parameter: name is required in the body.',
-      branchCode:'Parameter: branchCode is required in the body.',
-      branchDescription:'Parameter: branchDescription is required in the body.',
+      branch_name: 'Parameter: name is required in the body.',
+      branch_code:'Parameter: branchCode is required in the body.',
+      branch_description:'Parameter: branchDescription is required in the body.',
       status: 'Parameter: status is required in the body.',
     },
     properties: {
 
     },
   },
-  required: [ 'branchName', 'status', 'branchDescription' ],
+  required: [ 'branch_name', 'status', 'branch_description' ],
   additionalProperties: false,
 };
 
