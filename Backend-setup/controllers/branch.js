@@ -85,23 +85,6 @@ const update = async (req, res) => {
     return res.serverError(error);
   }
 };
-/**
- * @swagger
- * /branch:
- *   get:
- *     security:
- *       - Bearer: []
- *     summary: Get a list of branches
- *     tags: [branches]
- *     description: Retrieve a list of branches
- *     produces:
- *       - application/json
- *     responses:
- *       200:
- *         description: List of branches retrieved successfully
- *       401:
- *         description: Unauthorized
- */
 
 const getList = async (req, res) => {
   try {
@@ -143,43 +126,6 @@ const getList = async (req, res) => {
     return res.serverError(error);
   }
 };
-
-/**
- * @swagger
- * /branch-status-update/{publicId}:
- *   patch:
- *     security:
- *       - Bearer: []
- *     summary: Update the status of a branch by ID
- *     tags: [branches]
- *     description: Update the status of a branch by its public ID
- *     consumes:
- *       - application/x-www-form-urlencoded
- *     parameters:
- *       - in: header
- *         name: Authorization
- *         required: true
- *         description: Authorization token
- *       - in: path
- *         name: publicId
- *         required: true
- *         type: string
- *         description: Public ID of the branch to update the status
- *       - in: formData
- *         name: status
- *         enum:
- *           - active
- *           - inactive
- *         required: false
- *         description: Updated status for the branch
- *     produces:
- *       - application/x-www-form-urlencoded
- *     responses:
- *       200:
- *         description: Branch status updated successfully
- *       400:
- *         description: Invalid status value
- */
 
 const updateStatus = async (req, res) => {
   try {
@@ -226,23 +172,6 @@ const updateStatus = async (req, res) => {
     return res.serverError(error);
   }
 };
-/**
- * @swagger
- * /branch-status:
- *   get:
- *     security:
- *       - Bearer: []
- *     summary: Get a list of branches with status
- *     tags: [branches]
- *     description: Retrieve a list of branches along with their status
- *     produces:
- *       - application/json
- *     responses:
- *       200:
- *         description: List of branches with status retrieved successfully
- *       401:
- *         description: Unauthorized
- */
 
 const getListStatus = async (req, res) => {
   try {
@@ -272,33 +201,6 @@ const getListStatus = async (req, res) => {
     return res.serverError(error);
   }
 };
-/**
- * @swagger
- * /branch-stats-by-field-name/{fieldname}:
- *   get:
- *     security:
- *       - Bearer: []
- *     summary: Retrieve statistics for branches based on a specific field name
- *     tags: [branches]
- *     description: Retrieve statistics for branches based on a specific field name
- *     parameters:
- *       - in: header
- *         name: Authorization
- *         required: true
- *         description: Authorization token
- *       - in: path
- *         name: fieldname
- *         required: true
- *         type: string
- *         description: Field name for which statistics are needed
- *     produces:
- *       - application/json
- *     responses:
- *       200:
- *         description: Branch statistics retrieved successfully
- *       401:
- *         description: Unauthorized
- */
 
 const getStatsByFieldName = async (req, res) => {
   try {
