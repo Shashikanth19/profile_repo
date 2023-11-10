@@ -1,35 +1,39 @@
 const { designations: DesignationsModel, sequelize } = require("../database");
 
 const uuidv1 = require("uuid/v1");
+const Helper = require("../utils/helper");
 
 const save = async (payload) => {
   try {
-    const { desg_name, ...body } = payload;
+    const { desgName, ...body } = payload;
 
-    const public_id = uuidv1();
-    const concurrency_stamp = uuidv1();
+    const publicId = uuidv1();
+    const concurrencyStamp = uuidv1();
 
     const doc = {
-      public_id,
-      desg_name,
+      publicId,
+      desgName,
       ...body,
-      concurrency_stamp,
+      concurrencyStamp,
     };
 
     const transaction = await sequelize.transaction();
     const isExist = await DesignationsModel.findOne({
-      where: { desg_name: desg_name },
+      where: { desg_name: desgName },
       transaction,
     });
 
     if (isExist) {
       await transaction.rollback();
-      return { errors: [{ name: "desg_name", message: "duplicate entry." }] };
+      return { errors: [{ name: "desgName", message: "duplicate entry." }] };
     }
 
-    const designations = await DesignationsModel.create(doc);
+    const designations = await DesignationsModel.create({
+      ...Helper.convertCamelToSnake(doc),
+      transaction,
+    });
 
-    return { doc: { public_id } };
+    return { doc: { publicId } };
   } catch (error) {
     console.log(error);
     return res
@@ -51,34 +55,34 @@ const getList = async (payload) => {
 
 const update = async (payload) => {
   try {
-    const { public_id, ...data } = payload;
-    const { concurrency_stamp } = data;
+    const { publicId, ...data } = payload;
+    const { concurrencyStamp } = data;
 
     const transaction = await sequelize.transaction();
 
     const response = await DesignationsModel.findOne({
-      where: { public_id: public_id },
+      where: { public_id: publicId },
       transaction,
     });
 
     if (response) {
       const { concurrency_stamp: stamp } = response;
 
-      if (concurrency_stamp === stamp) {
+      if (concurrencyStamp === stamp) {
         const newConcurrencyStamp = uuidv1();
         const doc = {
-          ...payload,
+          ...Helper.convertCamelToSnake(payload),
           concurrency_stamp: newConcurrencyStamp,
         };
 
         const updatedData = await DesignationsModel.update(doc, {
-          where: { public_id: public_id },
+          where: { public_id: publicId },
           transaction,
         });
 
         await transaction.commit();
 
-        return { doc: { concurrency_stamp: newConcurrencyStamp } };
+        return { doc: { concurrencyStamp: newConcurrencyStamp } };
       } else {
         await transaction.rollback();
         return { concurrencyError: { message: "invalid concurrecy stamp" } };
@@ -97,42 +101,42 @@ const update = async (payload) => {
 };
 
 const updateStatus = async (payload) => {
-  const { public_id, ...data } = payload;
-  const { concurrency_stamp } = data;
+  const { publicId, ...data } = payload;
+  const { concurrencyStamp } = data;
 
   const transaction = await sequelize.transaction();
 
   try {
     const response = await DesignationsModel.findOne({
-      where: { public_id: public_id },
+      where: { public_id: publicId },
       transaction,
     });
 
     if (response) {
       const { concurrency_stamp: stamp } = response;
 
-      if (concurrency_stamp === stamp) {
+      if (concurrencyStamp === stamp) {
         const newConcurrencyStamp = uuidv1();
 
         const doc = {
-          ...payload,
+          ...Helper.convertCamelToSnake(payload),
           concurrency_stamp: newConcurrencyStamp,
         };
 
         await DesignationsModel.update(doc, {
-          where: { public_id: public_id },
+          where: { public_id: publicId },
           transaction,
         });
 
         await transaction.commit();
 
-        return { doc: { concurrency_stamp: newConcurrencyStamp }}
+        return { doc: { concurrencyStamp: newConcurrencyStamp } };
       }
       await transaction.rollback();
 
       return { concurrencyError: { message: "inValid concurrency stamp" } };
     }
-    return {}
+    return {};
   } catch (error) {
     console.log(error);
 

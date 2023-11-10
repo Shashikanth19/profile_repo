@@ -3,27 +3,27 @@ const updateDesignations = {
     description: 'Defines the structure for HTTP PATCH request body',
     type: 'object',
     properties: {
-      public_id: {
+      publicId: {
         type: 'string',
         description: 'public guid of the Designations',
         format: "uuid"
       },
-      desg_name: {
+      desgName: {
         type: "string",
-        description: " desg_name",
+        description: " desgName",
       },
      
-      concurrency_stamp: {
+      concurrencyStamp: {
         type: 'string',
         description: 'unique reference of concurrencyStamp',
         format: "uuid"
       },
     },
-    required: ['public_id', 'concurrency_stamp'],
+    required: ['publicId', 'concurrencyStamp'],
     errorMessage: {
       required: {
-        public_id: 'Parameter: publicId is required in the body.',
-        concurrency_stamp: 'Parameter: concurrencyStamp is required in the body.',
+        publicId: 'Parameter: publicId is required in the body.',
+        concurrencyStamp: 'Parameter: concurrencyStamp is required in the body.',
       },
     },
     additionalProperties: false,

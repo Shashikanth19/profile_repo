@@ -69,14 +69,14 @@ const update = async (req, res) => {
   try {
     const {
       body,
-      params: { public_id },
-      headers: { "x-coreplatform-concurrencystamp": concurrency_stamp },
+      params: { publicId },
+      headers: { "x-coreplatform-concurrencystamp": concurrencyStamp },
     } = req;
 
     const data = {
       ...body,
-      public_id,
-      concurrency_stamp,
+      publicId,
+      concurrencyStamp,
     };
 
        const { errors } = Validator.isSchemaValid({ data, schema: updateDesignationsSchema });
@@ -112,12 +112,12 @@ const update = async (req, res) => {
 
 const updateStatus = async (req, res) => {
   try{
-    const { body, params : { public_id }, headers: {"x-coreplatform-concurrencystamp": concurrency_stamp } } = req;
+    const { body, params : { publicId }, headers: {"x-coreplatform-concurrencystamp": concurrencyStamp } } = req;
 
     const data = {
       ...body,
-      public_id,
-      concurrency_stamp
+      publicId,
+      concurrencyStamp
     }
 
     const { errors } = Validator.isSchemaValid({ data, schema: updateDesignationsStatusSchema })

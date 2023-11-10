@@ -3,18 +3,18 @@ const saveDesignations = {
   description: "Defines the structure for HTTP POST request body",
   type: "object",
   properties: {
-    desg_name: {
+    desgName: {
       type: "string",
-      description: " desg_name",
+      description: " desgName",
     },
   },
   errorMessage: {
     required: {
-      desg_name: "Parameter: desg_name is required in the body.",
+      desgName: "Parameter: desgName is required in the body.",
     },
     properties: {},
   },
-  required: ["desg_name"],
+  required: ["desgName"],
   additionalProperties: false,
 };
 

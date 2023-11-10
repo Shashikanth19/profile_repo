@@ -3,6 +3,6 @@ const { save, getList,update , updateStatus } = require('../controllers/designat
 module.exports = (router) => {
     router.post("/designations", save)
     router.get("/designations", getList);
-    router.patch("/designations/:public_id", update);
-    router.patch("/designations-status-update/:public_id", updateStatus);
+    router.patch("/designations/:publicId", update);
+    router.patch("/designations-status-update/:publicId", updateStatus);
 }
