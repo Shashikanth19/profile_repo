@@ -269,6 +269,53 @@ const getStatsByFieldName = async (req, res) => {
   }
 };
 
+const generatePDFController = async (req, res) => {
+  try {
+    /** Destructure relevant properties from the request object */
+    const {
+      user: { role },
+      query: { pageSize: pageSizeString, pageNumber: pageNumberString, ...query },
+    } = req;
+
+    /** Parse pagination parameters with fallback values */
+    const pageNumber = parseInt(pageNumberString || 1);
+    const pageSize = parseInt(pageSizeString || 10);
+
+    /** Prepare records object with user, pagination, and query information */
+    const records = {
+      ...query,
+      role,
+      pageNumber,
+      pageSize,
+    };
+
+    /** Retrieve data from BillsService based on the provided parameters */
+    const data = await BillsService.getList(records);
+    console.log('data.doc', data.doc);
+
+    /** Validate the format of the retrieved data */
+    if (!Array.isArray(data.doc)) {
+      console.error('Invalid data format. Expected an array.');
+      return res.status(400).json({ error: 'Invalid data format. Expected an array.' });
+    }
+
+    /** Generate a PDF buffer using the retrieved data */
+    const pdfBuffer = await BillsService.generatePDFService(data.doc);
+    console.log('PDF Buffer:', pdfBuffer);
+
+    /** Set response headers for serving the PDF */
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader('Content-Disposition', 'inline; filename=output.pdf');
+    
+    /** Send the generated PDF buffer as the response */
+    res.send(pdfBuffer);
+  } catch (error) {
+    /** Handle errors and send an internal server error response */
+    console.error('Error in generatePDFController:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
 module.exports = {
   save,
   update,
@@ -276,4 +323,6 @@ module.exports = {
   updateStatus,
   getListStatus,
   getStatsByFieldName,
+  generatePDFController,
+  
 };

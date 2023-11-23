@@ -1,6 +1,7 @@
 const { branches: BranchesModel, sequelize } = require("../database");
 const uuidV1 = require("uuid/v1");
 const Helper = require("../utils/helper");
+const { generatePDF } = require('../pdf/pdfGenerator');
 
 const save = async (payload) => {
   const { branch_name, branch_code, branch_description, status } = payload;
@@ -227,6 +228,14 @@ const getStatsByFieldName = async (payload, fieldname) => {
   return { count: 0, doc: [] };
 };
 
+const generatePDFService = async (data) => {
+  /** Define columns to exclude */
+  const excludedColumns = ['publicId', 'userId', 'price', 'offer', 'cgst', 'sgst', 'finalPrice', 'totalPrice', 'concurrencyStamp', 'createdBy', 'updatedBy', 'createdAt', 'updatedAt', 'customersId'];
+
+  /** Call the centralized PDF generation function */
+  return generatePDF(data, excludedColumns);
+};
+
 module.exports = {
   save,
   update,
@@ -234,4 +243,5 @@ module.exports = {
   updateStatus,
   getListStatus,
   getStatsByFieldName,
+  generatePDFService
 };
