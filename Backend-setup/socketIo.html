@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Socket IO</title>
+
+    <!-- Include Bootstrap CSS -->
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    />
+
+    <!-- Custom CSS for notifications -->
+    <style>
+      body {
+        padding: 20px;
+      }
+
+      #supplierNotifications {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        max-width: 300px;
+      }
+
+      .notification {
+        margin-bottom: 10px;
+      }
+
+      .notification p {
+        margin-bottom: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Get Response from the server</h1>
+
+    <!-- Add an input field and a button -->
+    <div class="input-group mb-3">
+      <input
+        type="text"
+        id="messageInput"
+        class="form-control"
+        placeholder="Type your message"
+      />
+      <div class="input-group-append">
+        <button class="btn btn-primary" onclick="sendMessage()">
+          Send Message
+        </button>
+      </div>
+    </div>
+
+    <!-- Display area for supplier notifications -->
+    <div id="supplierNotifications"></div>
+
+    <!-- Include Bootstrap JS and Socket.IO -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.0/socket.io.js"></script>
+
+    <script>
+      const socket = io();
+
+      socket.on("connect", () => {
+        console.log("Connected. Socket ID: " + socket.id);
+      });
+
+      socket.on("server", (msg) => {
+        console.log("Server message: " + msg);
+      });
+
+      socket.on("server_notification", (msg) => {
+        console.log("Server notification: " + msg);
+      });
+
+      socket.on("posCartAdded", (data) => {
+        console.log("Product added to cart:", data);
+      });
+
+      socket.on("customersAdded", (data) => {
+        console.log("Customer Data:", data);
+      });
+
+      /** Listen for 'supplierNotification' event from the server */
+      socket.on("supplierNotification", (data) => {
+        console.log("Supplier Notification:", data);
+        /** Display the supplier notification in the UI */
+        displaySupplierNotification(data.message);
+      });
+
+      /** Function to send a message to the server */
+      function sendMessage() {
+        const messageInput = document.getElementById("messageInput");
+        const message = messageInput.value;
+
+        /** Emit a message event to the server */
+        socket.emit("message", message);
+      }
+
+      /** Function to display supplier notifications */
+      function displaySupplierNotification(message) {
+        const supplierNotifications = document.getElementById(
+          "supplierNotifications"
+        );
+        const notificationElement = document.createElement("div");
+        notificationElement.className = "notification alert alert-success";
+        notificationElement.innerHTML = `<p>${message}</p>`;
+        supplierNotifications.appendChild(notificationElement);
+
+        /** Remove the notification after a few seconds */
+        setTimeout(() => {
+          supplierNotifications.removeChild(notificationElement);
+        }, 9000);
+      }
+    </script>
+  </body>
+</html>
