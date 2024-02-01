@@ -1,31 +1,21 @@
-import React, { lazy, Suspense, useState } from "react";
-import 'bootstrap/dist/css/bootstrap.min.css';
-
+import React, { useState } from "react";
+import Button from 'react-bootstrap/Button';
+import MyVerticallyCenteredModal from '../src/components/MyVerticallyCenteredModal'
+import LoginModal from "./components/LoginModal";
 export default function App() {
-  const [showForm, setShowForm] = useState(true);
-  const Form = lazy(() => import('../src/components/Form'));
-
-  const handleHideClick = () => {
-    setShowForm(!showForm);
-  };
+  const [modalShow, setModalShow] = useState(false);
 
   return (
     <>
-      <div className="container mt-5">
-        <h1>Click Button To Show/Hide Login Form</h1>
-        <button
-          onClick={handleHideClick}
-          className="btn btn-primary"
-        >
-          {showForm ? "Hide" : "Show"}
-        </button>
+    <LoginModal></LoginModal>
+      {/* <Button variant="primary" onClick={() => setModalShow(true)}>
+        Launch vertically centered modal
+      </Button>
 
-        {showForm && (
-          <Suspense fallback={<div>Loading...</div>}>
-            <Form />
-          </Suspense>
-        )}
-      </div>
+      <MyVerticallyCenteredModal
+        show={modalShow}
+        onHide={() => setModalShow(false)}
+      /> */}
     </>
   );
 }
